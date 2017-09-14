@@ -10,5 +10,6 @@
 *.manifest
 *.txt
 *.csv
+tmp
 *Debug
 *x64

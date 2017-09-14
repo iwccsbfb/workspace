@@ -1,0 +1,486 @@
+import sys
+import os
+
+class Solution(object):
+    # ones record the 1st bit, twos record 2nd bit
+    # ab: 00->01->10; if ab == 11: ab=00
+
+    def addBit(self, bit, i):
+        """
+        add num at i-th bit
+        """
+        a = (self.ones >> i) & 1
+        b = (self.twos >> i) & 1
+        carry = 0
+        a, carry = a^bit, a&bit
+        b ^= carry
+        if a&b: a = b = 0
+        self.ones ^= (-a ^ self.ones) & (1 << i)
+        self.twos ^= (-b ^ self.twos) & (1 << i)
+        return
+        if a: self.ones |= 1<<i
+        else: self.ones &= ~(1<<i)
+        if b: self.twos |= 1<<i
+        else: self.twos &= ~(1<<i)
+
+    def singleNumber(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        self.ones = 0
+        self.twos = 0
+
+        for num in nums:
+            for i in range(32):
+                self.addBit((num>>i)&1, i)
+
+        if self.ones > (1<<31):
+            # self.ones is negative
+            res = 0
+            for i in range(31):
+                if (self.ones>>i) & 1 == 0:
+                    res |= 1<<i
+            return -(res+1)
+        else:
+            return self.ones
+
+
+    def singleNumber2(self, nums):
+        one = two = 0
+        for num in nums:
+            two ^= one&num
+            one ^= num
+            tmp = ~(one & two)
+            one &= tmp
+            two &= tmp
+        return one
+
+class Solution(object):
+    def maxSubArray(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        if len(nums) == 0: return 0
+
+        max_ending_here = nums[0]
+        max_so_far = nums[0]
+        for num in nums[1:]:
+            max_ending_here = max(num, max_ending_here + num)
+            max_so_far = max(max_so_far, max_ending_here)
+        return max_so_far
+
+class Solution(object):
+    def searchRecursively(self, matrix, target, x1, y1, x2, y2, horizontal = True):
+        """
+        :param x1, y1: left top coordinate
+        :param x2, y2: right down coordinate
+        :param horizontal: to iterate horizontally, or vertically
+        :rtype: bool
+        """
+        if horizontal:
+            left, right = x1, x2
+            if target < matrix[left][y1]:
+                return False
+            elif target > matrix[right][y1]:
+                pass
+            else:
+                while left <= right:
+                    mid = (left+right)/2
+                    if target == matrix[mid][y1]:
+                        return True
+                    elif target > matrix[mid][y1]:
+                        left = mid+1
+                    else: right = mid-1
+                # if a[i] < target < a[i+1]; after while: right + 1 == left
+                x2 = right
+            return self.searchRecursively(matrix, target, x1, y1, x2, y2, False)
+        else:
+            top, down = y1, y2
+            if target < matrix[x2][top]:
+                pass
+            elif target > matrix[x2][down]:
+                return False
+            else:
+                while top <= down:
+                    mid = (top+down)/2
+                    if target == matrix[x2][mid]:
+                        return True
+                    elif target > matrix[x2][mid]:
+                        top = mid+1
+                    else: down = mid-1
+                #  after while: top + 1 == down
+                y1 = top
+            return self.searchRecursively(matrix, target, x1, y1, x2, y2, True)
+
+    def searchMatrix(self, matrix, target):
+        """
+        :type matrix: List[List[int]]
+        :type target: int
+        :rtype: bool
+        """
+        if len(matrix) == 0: return False
+        x_size = len(matrix)-1
+        y_size = len(matrix[0])-1
+        return self.searchRecursively(matrix, target, 0, 0, x_size, y_size)
+
+
+class Solution(object):
+    def get_value(self, matrix, index):
+        i = index / self.N
+        j = index - i*self.N
+        return matrix[i][j]
+
+    def searchMatrix(self, matrix, target):
+        """
+        :type matrix: List[List[int]]
+        :type target: int
+        :rtype: bool
+        """
+        if len(matrix) == 0: return False
+        self.M, self.N = len(matrix), len(matrix[0])
+        left, right = 0, self.M*self.N - 1
+        while left <= right:
+            mid = (left+right)/2
+            mid_val = self.get_value(matrix, mid)
+            if target > mid_val:
+                left = mid + 1
+            elif target == mid_val:
+                return True
+            else:
+                right = mid - 1
+        return False
+
+# Definition for singly-linked list.
+class ListNode(object):
+    def __init__(self, x):
+        self.val = x
+        self.next = None
+
+class Solution(object):
+    def getIntersectionNode(self, headA, headB):
+        """
+        :type head1, head1: ListNode
+        :rtype: ListNode
+        """
+        cnt1 = cnt2 = 0
+        curA, curB = headA, headB
+        while curA != None:
+            curA = curA.next
+            cnt1 += 1
+        while curB != None:
+            curB = curB.next
+            cnt2 += 1
+        curA, curB = headA, headB
+        cnt = abs(cnt2 - cnt1)
+        if cnt2 > cnt1:
+            while cnt > 0:
+                curB = curB.next
+                cnt -= 1
+        elif cnt1 > cnt2:
+            while cnt > 0:
+                curA = curA.next
+                cnt -= 1
+        while curA != None:
+            if curA == curB:
+                return curA
+            curA = curA.next
+            curB = curB.next
+        return None
+
+class Solution(object):
+    def minimumTotal(self, triangle):
+        """
+        :type triangle: List[List[int]]
+        :rtype: int
+        """
+        res = []
+        for i in range(len(triangle)):
+            res.append([0]*(i+1))
+        res[0][0] = triangle[0][0]
+        for i in range(1, len(triangle)):
+            res[i][0] = triangle[i][0] + res[i-1][0]
+            res[i][i] = triangle[i][i] + res[i-1][i-1]
+            for j in range(1, len(triangle[i])-1):
+                res[i][j] = triangle[i][j] + min(res[i-1][j-1], res[i-1][j])
+        return min(res[-1])
+
+class Solution(object):
+    def isMatchRecursive(self, s, p):
+        """
+        :type s: str
+        :type p: str
+        :rtype: bool
+        """
+        n1, n2 = len(s), len(p)
+        if n2 == 0 and n1 == 0: return True
+        elif n2 == 0 and n1 != 0: return False
+        elif n2 != 0 and n1 == 0:
+            for ch in p:
+                if ch != '*': return False
+            return True
+        for i in range(n1):
+            if i >= n2: return False
+            if p[i] == '?': continue
+            elif p[i] != '*':
+                if p[i] == s[i]: continue
+                else: return False
+            else: # p[i] == '*'
+                for j in range(i, n1):
+                    if self.isMatchRecursive(s[j:], p[i+1:]):
+                        return True
+                return False
+
+    def isMatch(self, s, p):
+        """
+        :type s: str
+        :type p: str
+        :rtype: bool
+        """
+        p2 = ""
+        for ch in p:
+            if ch != '*': p2 += ch
+            elif len(p2) != 0 and p2[-1] != '*':
+                p2 += ch
+        return self.isMatchRecursive(s, p2)
+
+
+class Solution(object):
+    def minPathSum(self, grid):
+        """
+        :type grid: List[List[int]]
+        :rtype: int
+        """
+        n1 = len(grid)
+        n2 = len(grid[0])
+        res = [0]*n2
+        res[0] = grid[0][0]
+        for j in range(1, n2):
+            res[j] = res[j-1] + grid[0][j]
+        for i in range(1, n1):
+            res[0] = res[0] + grid[i][0]
+            for j in range(1, n2):
+                res[j] = min(res[j-1], res[j]) + grid[i][j]
+        return res[-1]
+
+class Solution(object):
+    def maxProduct(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        curMax = res = nums[0]
+        curMin = nums[0] # the min, if it is negative; or 1, if all positive
+        for num in nums[1:]:
+            if num >= 0:
+                curMax = max(curMax*num, num)
+                curMin = min(curMin*num, num)
+            else:
+                curMax, curMin = max(curMin*num, num), min(curMax*num, num)
+            if curMax > res: res = curMax
+        return res
+
+class Solution(object):
+    def isValid(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        stack = []
+        s1, s2 = '([{', ')]}'
+        mm = {} # my map
+        mm['('] = mm[')'] = 1
+        mm['['] = mm[']'] = 2
+        mm['{'] = mm['}'] = 3
+        for ch in s:
+            if ch in s1:
+                stack += ch
+            elif ch in s2:
+                if len(stack) != 0 and mm[stack[-1]] == mm[ch]:
+                    stack = stack[:-1] # pop
+                else: return False
+        if len(stack) == 0:
+            return True
+        return False
+
+    def fair_value_dice_game(self, n):
+        """
+        :param n: the rolling times of the dice
+        :return: int(fair_value*10000)
+        """
+        res  = 3.5
+        for i in range(1,n):
+            if res < 4:
+                p1 = 3.0/6
+                f2 = 1.0/6*(4+5+6)
+            elif 4 <= res < 5:
+                p1 = 4.0/6
+                f2 = 1.0/6*(5+6)
+            elif 5 <= res < 6:
+                p1 = 5.0/6
+                f2 = 1.0/6*(6)
+            res = res*p1 + f2
+        return int(res*10000)
+
+    def if_product(self, num, cnt = 3):
+        """
+        :param num: input number
+        :param cnt:
+        :return type: bool
+        """
+        if cnt == 1: return True
+        for i in range(2, num/2+1):
+            if float(num)/i == num/i and self.if_product(num/i, cnt-1):
+                return True
+        return False
+
+def traverse(seq_len):
+    idx = 1
+    traversed = []
+    while len(traversed) < seq_len:
+        traversed.append([idx, 2*len(traversed)+1])
+        idx += 2
+        if idx > seq_len:
+            idx -= seq_len
+
+    sum = 0
+    for idx, i in traversed:
+        sum += idx*i
+    print sum
+
+def day8():
+    # Enter your code here. Read input from STDIN. Print output to STDOUT
+    cnt = int(raw_input())
+    dict = {}
+    for i in range(cnt):
+        name = raw_input().strip()
+        num = int(raw_input())
+        dict[name] = num
+
+    try:
+        while True:
+            name = raw_input().strip()
+            if dict.has_key(name):
+                print "{0}={1}".format(name, dict[name])
+            else:
+                print "Not found"
+    except EOFError:
+        pass
+
+def day9():
+    def find_gcd(a,b):
+        #write base condition
+        if a==b: return a
+        if a==0: return b
+        if b==0: return a
+        return find_gcd(b,a%b)
+    #Take input
+    a,b = map(int, raw_input().strip().split(' '))
+    gcd=find_gcd(a,b)
+    print gcd
+
+def day10():
+    N = int(raw_input())
+    for i in range(N):
+        num = int(raw_input())
+        s = ''
+        while num > 0:
+            if num & 1: s = '1' + s
+            else: s = '0' + s
+            num >>= 1
+        print s
+
+
+def partition(nums, s, e):
+    pivot = nums[e]
+    idx = s
+    for i in range(s,e):
+        if nums[i] < pivot:
+            nums[i], nums[idx] = nums[idx], nums[i]
+            idx += 1
+    nums[idx], nums[e] = nums[e], nums[idx]
+    return idx
+
+def quick_sort_iterative(nums, s, e):
+    if s >= e: return
+    idx = partition(nums, s, e)
+    quick_sort_iterative(nums, s, idx-1)
+    quick_sort_iterative(nums, idx+1, e)
+
+def quick_sort(nums):
+    quick_sort_iterative(nums, 0, len(nums)-1)
+
+def day16():
+    N = int(raw_input())
+    nums = map(int, raw_input().strip().split(' '))
+    nums.sort()
+    min_diff = sys.maxint
+    res = []
+    n1 = nums[0]
+    for n2 in nums[1:]:
+        diff = abs(n2-n1)
+        if diff < min_diff:
+            min_diff = diff
+            res = [(n1, n2)]
+        elif diff == min_diff:
+            res.append((n1,n2))
+        n1 = n2
+    res_str = ''
+    for pair in res:
+        res_str += "{0} {1} ".format(pair[0], pair[1])
+    res_str = res_str.strip()
+    print res_str
+
+class MedianFinder:
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.li = []
+
+    def addNum(self, num):
+        """
+        Adds a num into the data structure.
+        :type num: int
+        :rtype: void
+        """
+
+        self.li.append(num)
+
+
+    def findMedian(self):
+        """
+        Returns the median of current data stream
+        :rtype: float
+        """
+        self.li.sort()
+        n = len(self.li)
+        if n%2 == 1:
+            return self.li[n/2]
+        else:
+            return (self.li[n/2-1]+self.li[n/2])/2.0
+
+
+# Your MedianFinder object will be instantiated and called as such:
+# mf = MedianFinder()
+# mf.addNum(1)
+# mf.findMedian()
+
+
+if __name__ == "__main__":
+    #nums = [12,7,1,5,2,6,9,3]
+    #quick_sort(nums)
+    #print nums
+
+    day16()
+
+
+
+
+
+
+
+
+
+
