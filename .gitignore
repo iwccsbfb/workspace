@@ -1,0 +1,14 @@
+*.exe
+*.o
+*.zip
+*.dll
+*.idb
+*.pdb
+*.obj
+*log
+*.ilk
+*.manifest
+*.txt
+*.csv
+*Debug
+*x64
