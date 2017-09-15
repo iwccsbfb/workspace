@@ -1,0 +1,87 @@
+review:
+2. ts interview questions
+3. algorithms - use hackerank
+	- merge, quick, heap sort; 
+4. your passionate things; 
+	enjoy working with great people; 
+	I love to study the behavior of people (and I believe finance is a way to describe that) and I like rigorous math, 
+	and I enjoy implementing them in a rigorous and concise way. 
+	Complex systems - each person is behaving in a way,they are heterogenous and error-prone, and collectively they have some interesting result; 
+	Similar to the neural network;  genetic algorithms; 
+		-- Bitcoin - blockchain - I'll want to study it when I have a chance. 
+	- implement algorithms; aha moment; 
+	- kalman filter; 
+Why TS?
+	There are nerds and geeks in TS that I can learn from; And TS is large enough to have a lot of company resources that I can learn from;
+Q: 
+	the insurance group; 
+	rotation program for quant software engineer? 
+	Is TS prepared for potential financial crisis? 
+	what u have learned the most? 
+	
+g4g os/networking; 
+graph algo; 
+
+
+1. why Q, R - 0.5, B - 0.21 ? 
+5. - 绿皮书；
+
+
+驾照 exam; 
+
+
+
+
+oncoming weekends:
+	//modify resume; 
+	//reply linkedin msgs; lazard
+	apply other banks;
+prepare TS:  
+  morning:
+	1p3c 面经;
+    use Linux (vi, g++) & eclipse (install c++ plugin) to program; C++ / python;
+	review networking (DDoS attack); OS; DBMS; 
+	algo: introduction to algo; 
+	system design:	http://blog.gainlo.co/index.php/category/system-design-interview-questions/
+		design a calculator; 
+	https://www.quora.com/What-was-the-toughest-question-asked-to-you-in-a-Two-Sigma-interview
+  afternoon:	
+	L1 L2 regularization; type I/II errors; ROC curve; 
+	poison process; 
+	neural network: https://leonardoaraujosantos.gitbooks.io/artificial-inteligence/content/chapter1.html
+	
+
+
+
+
+TS onsite:
+	client-server: 
+		http://www.agileload.com/agileload/blog/2012/11/27/web-applications-performance-symptoms-and-bottlenecks-identification
+		client: javascript; 加载太慢，编译太慢，运行太慢。服务器预编译。用chrome profile js. 自己在js里加一些logging； 网页先加载更需要的东西，后台再慢慢加载其他东西。
+		profile css. fb: big pipe;https://www.facebook.com/notes/facebook-engineering/bigpipe-pipelining-web-pages-for-high-performance/389414033919/
+		The general idea is to decompose web pages into small re-usable chunks of functionality called Pagelets and pipeline them through several execution stages inside web servers and browsers. 
+		
+		database: sql query slow; too many queries;
+		Diminutive databases: too many small requests? 
+			http://www.riverbednews.com/legacy/2014/10/five-root-cause-reasons-your-applications-are-slow/
+		Check TCP retransmissions (use wireshark): 
+			whether it is below Transport layer, or above;
+		server端： CTN没有配好；
+			服务器code需要优化；（profile的机制）;  
+			thread pool太小，线程不够用；
+			写log太多 - 写磁盘太多。
+			cpu； memory开着swap; 
+			lock & critical section太多，所以慢；
+			load balance; 
+			
+	create index at db:
+		hashmap - single index;
+		btree - multiple indices;
+	design tv stream;
+		distributed db system;
+	design a service that receives data and transmits to multiple services:
+		multi-core (must use multi-processs. 1 process on 1 core?)
+	
+	
+	https://www.educative.io/collection/page/5668639101419520/5649050225344512/5766466041282560
+	
