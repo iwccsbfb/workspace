@@ -8,8 +8,6 @@
 #include "header.h"
 
 
-// iterator: implement : operation???
-
 // - mode 5 iterator
 class Iterator {
 public:
@@ -17,42 +15,48 @@ public:
     // Iterator(const Iterator& iter);
     virtual ~Iterator();
     // Returns the next element in the iteration.
-    int next();
+    virtual int next();
     // Returns true if the iteration has more elements.
     bool hasNext();
-    void remove();
 };
 
 class ModFiveIterator : public Iterator {
 public:
     ModFiveIterator(const vector<int> &nums) : Iterator(nums){
-        nextEle = 1; // can be any number
+		has_next = false; 
+		next_ele
     }
 
     // Returns the next element in the iteration.
     int next() {
         if (!hasNext())
             throw runtime_error("no more elements!");
-
-        return nextEle;
+		
+        return next_ele;
     }
 
     // Returns true if the iteration has more elements.
     bool hasNext() {
+		if(has_next) return true;
         while (Iterator::hasNext()) {
             int n = Iterator::next();
             if (n % 5 == 0) {
-                nextEle = n;
+                next_ele = n;
+				has_next = true;
                 return true;
             }
         }
         return false;
     }
 
-    void remove(){
-        Iterator::remove();
-    }
-
 private:
-    int nextEle;
+	bool has_next = false;
+    int next_ele;
 };
+
+
+int main() {
+	
+	return 0;
+}
+

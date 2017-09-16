@@ -13,3 +13,5 @@
 tmp
 *Debug
 *x64
+*.metadata
+RemoteSystemsTempFiles
